@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Safari da Sorte</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="screen start-screen" id="start-screen" aria-labelledby="start-title">
+        <div class="brand-mark" aria-hidden="true">🐼</div>
+        <p class="eyebrow">Jogo de probabilidade</p>
+        <h1 id="start-title">Safari da Sorte</h1>
+        <p class="start-copy">
+          Encontre três animais iguais em uma linha ou diagonal para vencer.
+        </p>
+        <button class="primary-button" id="start-button" type="button">
+          Começar
+        </button>
+      </section>
+
+      <section class="screen game-screen is-hidden" id="game-screen" aria-labelledby="game-title">
+        <div class="game-header">
+          <div>
+            <p class="eyebrow">Rodada <span id="round-number">0</span></p>
+            <h2 id="game-title">Escolha da selva</h2>
+          </div>
+        </div>
+
+        <div class="board-frame" aria-live="polite">
+          <div class="board" id="board" role="grid" aria-label="Grade de emojis do jogo"></div>
+        </div>
+
+        <p class="result-message is-hidden" id="result-message"></p>
+
+        <div class="actions">
+          <button class="primary-button" id="play-again-button" type="button">
+            Jogar
+          </button>
+          <button class="ghost-button" id="restart-button" type="button">
+            Voltar ao início
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
