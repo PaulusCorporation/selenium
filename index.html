@@ -3,48 +3,118 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Safari da Sorte</title>
+    <title>Roleta da Sorte</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="app-shell">
+
+      <!-- ── Tela inicial ───────────────────────────────────────────────── -->
       <section class="screen start-screen" id="start-screen" aria-labelledby="start-title">
-        <div class="brand-mark" aria-hidden="true">🐼</div>
+        <div class="start-deco" aria-hidden="true"></div>
+        <div class="brand-mark" aria-hidden="true">🎰</div>
         <p class="eyebrow">Jogo de probabilidade</p>
-        <h1 id="start-title">Safari da Sorte</h1>
+        <h1 id="start-title">Roleta<br>da Sorte</h1>
         <p class="start-copy">
-          Encontre três animais iguais em uma linha ou diagonal para vencer.
+          Aposte no vermelho ou no preto e gire a roleta.<br>
+          A sorte está do seu lado?
         </p>
+        <div class="edu-warning" role="note">
+          ⚠️ Projeto educativo sobre vícios em apostas
+        </div>
         <button class="primary-button" id="start-button" type="button">
-          Começar
+          Entrar no Cassino
         </button>
       </section>
 
+      <!-- ── Tela de jogo ───────────────────────────────────────────────── -->
       <section class="screen game-screen is-hidden" id="game-screen" aria-labelledby="game-title">
+
         <div class="game-header">
-          <div>
-            <p class="eyebrow">Rodada <span id="round-number">0</span></p>
-            <h2 id="game-title">Escolha da selva</h2>
+          <div class="stat-card">
+            <span class="stat-label">Saldo</span>
+            <span class="stat-value gold" id="balance">R$ 1.000</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Rodada</span>
+            <span class="stat-value" id="round-number">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Perdas</span>
+            <span class="stat-value danger" id="total-lost">R$ 0</span>
           </div>
         </div>
 
-        <div class="board-frame" aria-live="polite">
-          <div class="board" id="board" role="grid" aria-label="Grade de emojis do jogo"></div>
+        <h2 id="game-title" class="sr-only">Roleta da Sorte</h2>
+
+        <!-- Roleta -->
+        <div class="wheel-wrap" aria-live="polite" aria-label="Roleta girando">
+          <div class="wheel-pointer" aria-hidden="true"></div>
+          <canvas id="roulette-canvas" width="340" height="340"></canvas>
         </div>
 
-        <p class="result-message is-hidden" id="result-message"></p>
+        <!-- Histórico de números -->
+        <div class="history-strip" id="history-strip" aria-label="Últimos números sorteados"></div>
+
+        <!-- Resultado -->
+        <div class="result-box is-hidden" id="result-box" role="status">
+          <span class="result-icon" id="result-icon"></span>
+          <span id="result-text"></span>
+        </div>
+
+        <!-- Apostas -->
+        <div class="bet-panel">
+          <p class="bet-label">Valor da aposta</p>
+          <div class="chip-row" id="chip-row">
+            <button class="chip chip-50 is-selected" data-value="50" type="button" aria-pressed="true">50</button>
+            <button class="chip chip-100"              data-value="100" type="button" aria-pressed="false">100</button>
+            <button class="chip chip-200"              data-value="200" type="button" aria-pressed="false">200</button>
+            <button class="chip chip-500"              data-value="500" type="button" aria-pressed="false">500</button>
+          </div>
+
+          <p class="bet-label">Sua aposta</p>
+          <div class="color-bet-row">
+            <button class="color-bet red-bet is-selected" id="bet-red"   data-color="red"   type="button" aria-pressed="true">
+              <span class="color-dot" aria-hidden="true"></span> Vermelho
+            </button>
+            <button class="color-bet black-bet"           id="bet-black" data-color="black" type="button" aria-pressed="false">
+              <span class="color-dot" aria-hidden="true"></span> Preto
+            </button>
+          </div>
+
+          <p class="potential">
+            Ganho potencial: <strong id="potential-win">R$ 100</strong>
+          </p>
+        </div>
 
         <div class="actions">
-          <button class="primary-button" id="play-again-button" type="button">
-            Jogar
+          <button class="primary-button spin-button" id="spin-button" type="button">
+            🎲 Girar Roleta
           </button>
           <button class="ghost-button" id="restart-button" type="button">
             Voltar ao início
           </button>
         </div>
       </section>
-    </main>
 
+      <!-- ── Tela de game over ──────────────────────────────────────────── -->
+      <section class="screen gameover-screen is-hidden" id="gameover-screen" aria-labelledby="go-title">
+        <div class="go-icon" aria-hidden="true">💸</div>
+        <h2 id="go-title">Saldo Esgotado</h2>
+        <p class="go-copy">
+          Você perdeu todo o seu saldo. Isso acontece com a grande maioria dos jogadores de apostas.
+        </p>
+        <div class="go-stats" id="go-stats"></div>
+        <div class="edu-box" role="note">
+          <strong>Sabia que?</strong> Cassinos e jogos de azar são matematicamente projetados para você perder no longo prazo. A "sorte" inicial é uma estratégia para criar o vício.
+        </div>
+        <div class="actions">
+          <button class="primary-button" id="play-again-button" type="button">Jogar Novamente</button>
+          <button class="ghost-button"   id="go-restart-button" type="button">Ir ao Início</button>
+        </div>
+      </section>
+
+    </main>
     <script src="script.js"></script>
   </body>
 </html>
