@@ -21,23 +21,20 @@ SHORT_WAIT = 3     # timeout para elementos aparecerem
 
 
 
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.service import Service
 
 def create_driver():
-    """Cria e retorna um ChromeDriver com as opções corretas."""
     options = Options()
-    options.add_argument("--headless")           # roda sem abrir janela
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--window-size=1280,800")
+    options.add_argument("--headless")
 
+    driver = webdriver.Firefox(
+        service=Service(GeckoDriverManager().install()),
+        options=options
+    )
 
-    from webdriver_manager.chrome import ChromeDriverManager
-    from selenium.webdriver.chrome.service import Service
-    driver = webdriver.Chrome(
-    service=Service(ChromeDriverManager().install()),
-    options=options
-)
- 
     driver.get(PAGE_URL)
     return driver
 
@@ -197,25 +194,23 @@ class TestNavegacao(unittest.TestCase):
         start = self.wait.until(EC.visibility_of_element_located((By.ID, "start-screen")))
         self.assertTrue(start.is_displayed(), "Tela inicial deve voltar ao clicar em 'Voltar ao início'.")
 
-    # TC-15
-    def test_15_jogar_novamente_reinicia_saldo(self):
-        """'Jogar Novamente' na tela de game over deve reiniciar com saldo R$ 1.000."""
-        # Força game over via JavaScript (zera o saldo)
-        self.driver.find_element(By.ID, "start-button").click()
-        self.wait.until(EC.visibility_of_element_located((By.ID, "game-screen")))
+def test_15_jogar_novamente_reinicia_saldo(self):
+    """'Jogar Novamente' na tela de game over deve reiniciar com saldo R$ 1.000."""
+    self.driver.find_element(By.ID, "start-button").click()
+    self.wait.until(EC.visibility_of_element_located((By.ID, "game-screen")))
 
-        self.driver.execute_script("""
-            state.balance = 0;
-            state.betAmount = 50;
-            showGameOver();
-            """)
+    self.driver.execute_script("""
+        window.state.balance = 0;
+        window.state.betAmount = 50;
+        showGameOver();
+    """)
 
-        self.wait.until(EC.visibility_of_element_located((By.ID, "gameover-screen")))
-        self.driver.find_element(By.ID, "play-again-button").click()
-        self.wait.until(EC.visibility_of_element_located((By.ID, "game-screen")))
+    self.wait.until(EC.visibility_of_element_located((By.ID, "gameover-screen")))
+    self.driver.find_element(By.ID, "play-again-button").click()
+    self.wait.until(EC.visibility_of_element_located((By.ID, "game-screen")))
 
-        balance = self.driver.find_element(By.ID, "balance").text
-        self.assertIn("1.000", balance, f"Saldo deve reiniciar em R$ 1.000 ao jogar novamente, obtido: {balance}")
+    balance = self.driver.find_element(By.ID, "balance").text
+    self.assertIn("1.000", balance)
 
 
 class TestAcessibilidade(unittest.TestCase):
